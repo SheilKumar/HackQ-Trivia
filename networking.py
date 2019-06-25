@@ -2,6 +2,7 @@ import asyncio
 import json
 import logging
 import re
+import requests
 
 import aiohttp
 from colorama import Fore, Style
@@ -13,7 +14,7 @@ import question
 
 async def fetch(url, session, timeout):
     try:
-        async with session.get(url, timeout=timeout) as response:
+        async with session.get(url) as response:
             return await response.text()
     except Exception:
         print(f"Server timeout/error to {url}")
@@ -33,8 +34,9 @@ async def get_responses(urls, timeout, headers):
 
 
 async def get_response(url, timeout, headers):
-    async with aiohttp.ClientSession(headers=headers) as session:
-        return await fetch(url, session, timeout)
+    session = requests.session()
+    pageText = await session.get(url).text
+    return pageText
 
 
 async def get_json_response(url, timeout, headers):

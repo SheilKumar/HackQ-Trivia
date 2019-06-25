@@ -17,7 +17,7 @@ HEADERS = {"User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:58.0) Gec
            "Accept": "*/*",
            "Accept-Language": "en-US,en;q=0.5",
            "Accept-Encoding": "gzip, deflate"}
-GOOGLE_URL = "https://www.google.com/search?q={}&ie=utf-8&oe=utf-8&client=firefox-b-1-ab"
+GOOGLE_URL = "https://www.google.com/search?q={}&ie=utf-8&oe=utf-8"
 
 
 def find_keywords(words):
@@ -64,10 +64,11 @@ def find_q_word_location(question_lower):
 
 def get_google_links(page, num_results):
     soup = BeautifulSoup(page, "html.parser")
-    results = soup.findAll("h3", {"class": "r"})
-
+    results = soup.findAll("div", {"class": "r"})
+    print(results)
     links = []
     for r in results:
+        print(r)
         url = r.find("a")
         if url is not None:
             links.append(url["href"])
@@ -86,13 +87,13 @@ async def search_google(question, num_results):
     # Could use Google's Custom Search API here, limit of 100 queries per day
     # result = service.cse().list(q=question, cx=CSE_ID, num=num_results).execute()
     # return result["items"]
-    page = await networking.get_response(GOOGLE_URL.format(question), timeout=5, headers=HEADERS)
+    page = networking.get_response(GOOGLE_URL.format(question), timeout=100, headers=HEADERS)
     return get_google_links(page, num_results)
 
 
 async def multiple_search(questions, num_results):
     queries = list(map(GOOGLE_URL.format, questions))
-    pages = await networking.get_responses(queries, timeout=5, headers=HEADERS)
+    pages = await networking.get_responses(queries, timeout=100, headers=HEADERS)
     link_list = [get_google_links(page, num_results) for page in pages]
     return link_list
 
