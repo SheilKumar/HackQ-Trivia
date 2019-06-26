@@ -23,7 +23,10 @@ GOOGLE_URL = "https://www.google.com/search?q={}&ie=utf-8&oe=utf-8"
 my_url = GOOGLE_URL.format(question1)
 print(my_url)
 req = requests.get(my_url)
-print(req)
 page_soup = soup(req.content, 'html.parser')
-print(page_soup)
-print(my_url)
+results_req = page_soup.findAll('div', attrs = {'class': 'ZINbbc'})
+links_req = []
+for r in results_req:
+    link = r.find('a', href = True)
+    links_req.append(link)
+print(links_req)
