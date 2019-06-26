@@ -1,5 +1,7 @@
 from search import *
 import asyncio
+import bs4
+from urllib.request import urlope as uReq
 
 async def test_URL():
     search = (search_google("Who is Salman Khan", 10))
