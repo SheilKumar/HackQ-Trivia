@@ -1,6 +1,6 @@
 from search import *
 import asyncio
-import bs4
+from bs4 import BeautifulSoup as soup
 from urllib.request import urlope as uReq
 
 async def test_URL():
@@ -12,6 +12,3 @@ async def main():
 
 if __name__ == "__main__":
     asyncio.run(main())
-
-
-# New Search Method
