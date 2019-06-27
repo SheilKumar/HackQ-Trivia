@@ -30,3 +30,18 @@ for r in results_req:
     link = r.find('a', href = True)
     links_req.append(link)
 print(links_req)
+
+import re
+
+to_remove = []
+clean_links = []
+
+for i,l in enumerate(links_req):
+    clean = re.search('\/url\?q\=(.*)\&sa',l)
+    # Anything that doesn't fit the above pattern will be removed
+    if clean is None:
+        to_remove.append(i)
+        continue
+    clean_links.append(clean.group(1))
+
+print(links_req)
