@@ -27,16 +27,22 @@ page_soup = soup(req.content, 'html.parser')
 results_req = page_soup.findAll('div', attrs = {'class': 'ZINbbc'})
 links_req = []
 for r in results_req:
-    link = r.find('a', href = True)
-    links_req.append(link)
-print(links_req)
+    try:
+        link = r.find('a', href = True)
+        links_req.append(link)
+
+        if link != "":
+            links_req.append(link['href'])
+    except:
+        continue
 
 import re
 
 to_remove = []
 clean_links = []
-
-for i,l in enumerate(links_req):
+    
+for i, l in enumerate(links_req):
+    print(l)
     clean = re.search('\/url\?q\=(.*)\&sa',l)
     # Anything that doesn't fit the above pattern will be removed
     if clean is None:
@@ -44,4 +50,4 @@ for i,l in enumerate(links_req):
         continue
     clean_links.append(clean.group(1))
 
-print(links_req)
+print(clean_links)
